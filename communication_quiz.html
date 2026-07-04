@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identify the Type of Communication</title>
+
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0b5394;
+}
+
+.instructions{
+    background:#eef6ff;
+    padding:15px;
+    border-left:5px solid #0b5394;
+    margin-bottom:20px;
+    border-radius:5px;
+}
+
+.question{
+    margin-bottom:25px;
+    padding:15px;
+    background:#fafafa;
+    border-radius:8px;
+    border-left:5px solid #2e75b6;
+}
+
+.question h3{
+    margin-top:0;
+}
+
+.options label{
+    display:block;
+    margin:6px 0;
+    cursor:pointer;
+}
+
+button{
+    background:#0b5394;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    font-size:16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#083b6f;
+}
+
+#result{
+    margin-top:30px;
+    padding:20px;
+    font-size:20px;
+    font-weight:bold;
+    text-align:center;
+    border-radius:8px;
+}
+
+.correct{
+    color:green;
+    font-weight:bold;
+}
+
+.answer{
+    margin-top:10px;
+    color:#0b5394;
+    font-style:italic;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Identify the Type of Communication</h1>
+
+<div class="instructions">
+<b>Instructions</b>
+<ul>
+<li>Select all the communication types that apply.</li>
+<li>Each correct option carries <b>1 mark</b>.</li>
+<li>No negative marking.</li>
+<li>Maximum Score: <b>13</b></li>
+</ul>
+</div>
+
+<div id="quiz"></div>
+
+<center>
+<button onclick="submitQuiz()">Submit</button>
+</center>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+const options=[
+"Verbal",
+"Non verbal",
+"Written",
+"Digital",
+"Interpersonal",
+"Privileged"
+];
+
+const questions=[
+
+{
+scenario:"A patient walks into the OPD. The receptionist smiles, greets him, and directs him to the registration counter.",
+correct:["Verbal","Non verbal","Interpersonal"]
+},
+
+{
+scenario:"The registration clerk enters the patient's demographic details into the Hospital Information System and prints an OP ticket.",
+correct:["Written","Digital"]
+},
+
+{
+scenario:'The patient reads a poster that says "People above 18 years should get their BP checked."',
+correct:["Written"]
+},
+
+{
+scenario:'The nurse calls out, "Mr. Kumar, please come inside."',
+correct:["Verbal"]
+},
+
+{
+scenario:"The doctor looks up from the computer, smiles, makes eye contact, and gestures towards the chair without saying anything.",
+correct:["Non verbal"]
+},
+
+{
+scenario:'Before examining the abdomen, the doctor says, "May I examine your abdomen?"',
+correct:["Verbal","Privileged"]
+},
+
+{
+scenario:"The patient's wife asks about the diagnosis. The doctor first seeks the patient's permission before discussing it.",
+correct:["Privileged"]
+},
+
+{
+scenario:"The nurse calls the patient two days later to ask whether he has started taking the medicines.",
+correct:["Verbal","Digital"]
+}
+
+];
+
+const quiz=document.getElementById("quiz");
+
+questions.forEach((q,index)=>{
+
+let div=document.createElement("div");
+div.className="question";
+
+let html=`<h3>Scenario ${index+1}</h3>
+<p>${q.scenario}</p>
+<div class="options">`;
+
+options.forEach(opt=>{
+html+=`
+<label>
+<input type="checkbox" name="q${index}" value="${opt}">
+${opt}
+</label>`;
+});
+
+html+=`</div>
+<div class="answer" id="answer${index}"></div>`;
+
+div.innerHTML=html;
+
+quiz.appendChild(div);
+
+});
+
+function submitQuiz(){
+
+let score=0;
+let max=0;
+
+questions.forEach(q=>max+=q.correct.length);
+
+questions.forEach((q,index)=>{
+
+let selected=[];
+
+document.querySelectorAll(`input[name=q${index}]:checked`).forEach(x=>{
+selected.push(x.value);
+});
+
+q.correct.forEach(ans=>{
+if(selected.includes(ans))
+score++;
+});
+
+document.getElementById("answer"+index).innerHTML=
+"<span class='correct'>Correct Answer(s): </span>"+q.correct.join(", ");
+
+});
+
+document.getElementById("result").innerHTML=
+"Your Score: <span style='color:#0b5394'>"+score+
+"</span> / "+max;
+
+window.scrollTo({
+top:document.body.scrollHeight,
+behavior:'smooth'
+});
+
+}
+
+</script>
+
+</body>
+</html>
